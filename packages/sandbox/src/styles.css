@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+main {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+}
+header {
+  margin-top: 2rem;
+  max-width: 800px;
+  width: 100%;
+}
+#editor {
+  max-width: 800px;
+  width: 100%;
+}
+#state {
+  max-width: 800px;
+  width: 100%;
+}
+.ProseMirror {
+  border: 1px solid #222;
+  font-family: "Quattrocento", serif;
+  max-width: 50rem;
+  min-height: 140px;
+  overflow-wrap: break-word;
+  outline: none;
+  padding: 0 1rem;
+  margin: 2rem 0;
+  white-space: pre-wrap;
+}
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+.block {
+  /* BUG here */
+  display: grid;
+  grid-template-columns: 128px auto;
+}
+.block > .name {
+  margin-top: 1rem;
+  padding-right: 1rem;
+}
+.block > .name > input {
+  width: 100%;
+}
+p {
+  margin: 1rem 0 0 0;
+}
