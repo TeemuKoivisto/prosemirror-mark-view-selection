@@ -37,17 +37,18 @@ header {
   display: none;
   visibility: hidden;
 }
-.block {
-  /* BUG here */
-  display: grid;
-  grid-template-columns: 128px auto;
+.mark-view {
+  position: relative;
 }
-.block > .name {
-  margin-top: 1rem;
-  padding-right: 1rem;
-}
-.block > .name > input {
-  width: 100%;
+.mark-view > .name {
+  color: #222;
+  font-family: Rubik, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0 2px 0 0;
+  position: absolute;
+  top: -1.25rem;
+  left: 0;
 }
 p {
   margin: 1rem 0 0 0;

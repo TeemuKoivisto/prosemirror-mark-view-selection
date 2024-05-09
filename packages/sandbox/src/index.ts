@@ -1,9 +1,9 @@
-import { EditorState, Plugin } from 'prosemirror-state'
+import { EditorState } from 'prosemirror-state'
 import { EditorView } from 'prosemirror-view'
 import { keymap } from 'prosemirror-keymap'
 import { Schema } from 'prosemirror-model'
 import { baseKeymap } from 'prosemirror-commands'
-import { CustomNodeView } from './CustomNodeView'
+import { CustomMarkView } from './CustomMarkView'
 
 const schema = new Schema({
   nodes: {
@@ -11,9 +11,6 @@ const schema = new Schema({
       content: 'block+'
     },
     paragraph: {
-      attrs: {
-        name: { default: null }
-      },
       content: 'inline*',
       group: 'block',
       selectable: false,
@@ -25,13 +22,26 @@ const schema = new Schema({
     text: {
       group: 'inline'
     }
+  },
+  marks: {
+    italic: {
+      attrs: { weight: { default: 0 } },
+      parseDOM: [{ tag: 'i' }, { tag: 'em' }, { style: 'font-style=italic' }],
+      toDOM() {
+        return ['em', 0]
+      }
+    }
   }
 })
 
 const state = EditorState.create({
   doc: schema.nodes.doc.createChecked(undefined, [
-    schema.nodes.paragraph.create(),
-    schema.nodes.paragraph.create({ name: 'N2' })
+    schema.nodes.paragraph.create(undefined, [
+      schema.text('here ', []),
+      schema.text('hello', [schema.mark('italic')]),
+      schema.text(' world', [])
+    ]),
+    schema.nodes.paragraph.create()
   ]),
   schema,
   plugins: [keymap(baseKeymap)]
@@ -39,8 +49,8 @@ const state = EditorState.create({
 const stateEl = document.querySelector('#state')
 const view = new EditorView(document.querySelector('#editor') as HTMLElement, {
   state,
-  nodeViews: {
-    paragraph: (n, v, g) => new CustomNodeView(n, v, g)
+  markViews: {
+    italic: (m, v, i) => new CustomMarkView(m, v, i).init()
   },
   dispatchTransaction(tr) {
     const state = this.state.apply(tr)
