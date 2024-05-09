@@ -22,7 +22,7 @@ export class CustomMarkView {
   init = (): ReturnType<MarkViewConstructor> => {
     const toDOM = this.mark.type.spec.toDOM
     if (!toDOM) {
-      throw Error(`@quickprose/core: node "${this.mark.type}" was not given a toDOM method!`)
+      throw Error(`mark "${this.mark.type}" was not given a toDOM method!`)
     }
     const { dom, contentDOM } = DOMSerializer.renderSpec(document, toDOM(this.mark, this.inline))
     this._dom = document.createElement(this.inline ? 'span' : 'div')

@@ -1,5 +1,5 @@
 body {
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
 }
 main {
@@ -7,7 +7,7 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 0 auto;
+  margin: 0 1rem;
 }
 header {
   margin-top: 2rem;
