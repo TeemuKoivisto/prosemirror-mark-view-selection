@@ -54,20 +54,21 @@ const widget = () => (view: EditorView, getPos: () => number | undefined) => {
   element.appendChild(name)
   return element
 }
-const decorations = [
+let decoSet = DecorationSet.create(state.doc, [
   Decoration.widget(6, widget(), {
-    side: 1
+    side: 0
   })
-]
+])
 const stateEl = document.querySelector('#state')
 const view = new EditorView(document.querySelector('#editor') as HTMLElement, {
   state,
-  decorations: s => DecorationSet.create(s.doc, decorations),
+  decorations: s => decoSet,
   // markViews: {
   //   italic: (m, v, i) => new CustomMarkView(m, v, i).init()
   // },
   dispatchTransaction(tr) {
     const state = this.state.apply(tr)
+    decoSet = decoSet.map(tr.mapping, tr.doc)
     view.updateState(state)
     stateEl!.innerHTML = JSON.stringify(state.toJSON())
   }
