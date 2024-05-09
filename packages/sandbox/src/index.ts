@@ -1,5 +1,5 @@
 import { EditorState } from 'prosemirror-state'
-import { EditorView } from 'prosemirror-view'
+import { Decoration, DecorationSet, EditorView } from 'prosemirror-view'
 import { keymap } from 'prosemirror-keymap'
 import { Schema } from 'prosemirror-model'
 import { baseKeymap } from 'prosemirror-commands'
@@ -25,7 +25,6 @@ const schema = new Schema({
   },
   marks: {
     italic: {
-      attrs: { weight: { default: 0 } },
       parseDOM: [{ tag: 'i' }, { tag: 'em' }, { style: 'font-style=italic' }],
       toDOM() {
         return ['em', 0]
@@ -46,12 +45,27 @@ const state = EditorState.create({
   schema,
   plugins: [keymap(baseKeymap)]
 })
+const widget = () => (view: EditorView, getPos: () => number | undefined) => {
+  const element = document.createElement('span')
+  element.classList.add('mark-view')
+  const name = document.createElement('button')
+  name.classList.add('name')
+  name.textContent = 'Btn'
+  element.appendChild(name)
+  return element
+}
+const decorations = [
+  Decoration.widget(6, widget(), {
+    side: 1
+  })
+]
 const stateEl = document.querySelector('#state')
 const view = new EditorView(document.querySelector('#editor') as HTMLElement, {
   state,
-  markViews: {
-    italic: (m, v, i) => new CustomMarkView(m, v, i).init()
-  },
+  decorations: s => DecorationSet.create(s.doc, decorations),
+  // markViews: {
+  //   italic: (m, v, i) => new CustomMarkView(m, v, i).init()
+  // },
   dispatchTransaction(tr) {
     const state = this.state.apply(tr)
     view.updateState(state)
